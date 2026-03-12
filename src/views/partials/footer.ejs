@@ -1,0 +1,19 @@
+
+
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<footer>
+  <nav>
+    <% pages.forEach((page) => { %>
+        <a href="<%= page.path %>"><%= page.name %></a>
+    <% }); %>
+    <a href="/falsy">Falsy</a>
+  </nav>
+<hr>
+<p>&copy; 2026 My Website</p>
+
+</footer>
+
