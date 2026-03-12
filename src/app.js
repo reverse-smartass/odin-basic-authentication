@@ -1,12 +1,12 @@
 /////// app.js
-
+const bcrypt = require("bcryptjs");
 const path = require("node:path");
 const { Pool } = require("pg");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-require('dotenv').config();
+require("dotenv").config();
 
 const pool = new Pool({
   database: process.env.DB_INVENTORY_DATABASE,
@@ -32,20 +32,26 @@ app.use(express.urlencoded({ extended: false }));
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      const { rows } = await pool.query(
+        "SELECT * FROM users WHERE username = $1",
+        [username],
+      );
       const user = rows[0];
 
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
+
+      const match = await bcrypt.compare(password ,user.password);
+      
+      if (!match) {
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
-    } catch(err) {
+    } catch (err) {
       return done(err);
     }
-  })
+  }),
 );
 
 passport.serializeUser((user, done) => {
@@ -54,11 +60,13 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
+      id,
+    ]);
     const user = rows[0];
 
     done(null, user);
-  } catch(err) {
+  } catch (err) {
     done(err);
   }
 });
@@ -68,18 +76,17 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-app.get("/", (req, res) => res.render("index", {pages}));
-app.get("/sign-up", (req, res) => res.render("sign-up-form", {pages}));
+app.get("/", (req, res) => res.render("index", { pages }));
+app.get("/sign-up", (req, res) => res.render("sign-up-form", { pages }));
 app.post("/sign-up", async (req, res, next) => {
   try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
       req.body.username,
-      req.body.password,
+      hashedPassword,
     ]);
     res.redirect("/");
-  } catch(err) {
+  } catch (err) {
     return next(err);
   }
 });
@@ -93,15 +100,13 @@ app.get("/log-out", (req, res, next) => {
   });
 });
 
-
 app.post(
   "/log-in",
   passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/"
-  })
+    failureRedirect: "/",
+  }),
 );
-
 
 app.listen(3000, (error) => {
   if (error) {
