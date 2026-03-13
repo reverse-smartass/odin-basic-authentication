@@ -7,17 +7,37 @@
 <body>
     <%- include('partials/header', { pages }) %>
     <h1>hello world!</h1>
+    <% if (locals.errors) { %>
+    <ul>
+        <% errors.forEach(error => { %>
+        <li style="color: red;"><%= error.msg %></li>
+        <% }) %>
+    </ul>
+    <% } %>
     <% if (locals.currentUser) {%>
-        <h1>WELCOME BACK <%= currentUser.username %></h1>
+        <h1>WELCOME BACK <%= currentUser.username %>, member status: <%= currentUser.member_status%></h1>
         <a href="/log-out">LOG OUT</a>
+        <h1>Message List</h1>
+        <ul>
+        <% if (currentUser.member_status) {%>
+            <% messages.forEach(message => { %>
+                <li><strong><%= message.username %>:</strong> <%= message.msg %> <em>(<%= message.created_at.toLocaleString() %>)</em> <button onclick="deleteItem('<%= message.id %>')">x</button> </li>
+            <% }) %>
+        <% } else { %>
+            <% messages.forEach(message => { %>
+                <li> <%= message.msg %>  <button onclick="deleteItem('<%= message.id %>')">x</button> </li>
+            <% }) %
+        <%}%>
+    </ul>
+    
     <% } else { %>
         <h1>please log in</h1>
         <form action="/log-in" method="POST">
-        <label for="username">Username</label>
-        <input id="username" name="username" placeholder="username" type="text" />
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" />
-        <button type="submit">Log In</button>
+            <label for="username">Username</label>
+            <input id="username" name="username" placeholder="username" type="text" />
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+            <button type="submit">Log In</button>
         </form>
     <%}%>
 </body>

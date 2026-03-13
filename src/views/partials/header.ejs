@@ -3,6 +3,11 @@
      <% pages.forEach((page) => { %>
         <a href="<%= page.path %>"><%= page.name %></a>
     <% }); %>
+     <% if (locals.currentUser) {%>
+        <% memberPages.forEach((page) => { %>
+          <a href="<%= page.path %>"><%= page.name %></a>
+        <% }); %>
+    <% } %>
   </nav>
 </header>
 <hr>

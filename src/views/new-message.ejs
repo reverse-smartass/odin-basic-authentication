@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <%- include('partials/header', { pages }) %>
+    <h1>New Message</h1>
+    <form method="POST" action="/message">
+        <div>
+            <label for="text">Message:</label>
+            <textarea id="text" name="text" required></textarea>
+        </div>
+        <button type="submit">Send Message</button>
+    </form>
+
+</body>
+</html>

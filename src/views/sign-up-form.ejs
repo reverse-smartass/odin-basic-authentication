@@ -6,12 +6,25 @@
 </head>
 <body>
     <%- include('partials/header', { pages }) %>
+    <% if (locals.errors) { %>
+    <ul>
+        <% errors.forEach(error => { %>
+        <li style="color: red;"><%= error.msg %></li>
+        <% }) %>
+    </ul>
+    <% } %>
   <h1>Sign Up</h1>
   <form action="/sign-up" method="POST">
+    <label for="first_name">First Name</label>
+    <input id="first_name" name="first_name" placeholder="First Name" type="text" value="<%= locals.previousData ? previousData.first_name : '' %>"required/>
+    <label for="last_name">Last Name</label>
+    <input id="last_name" name="last_name" placeholder="Last Name" type="text" value="<%= locals.previousData ? previousData.last_name : '' %>"required/>
     <label for="username">Username</label>
-    <input id="username" name="username" placeholder="username" type="text" />
+    <input id="username" name="username" placeholder="username" type="email" value="<%= locals.previousData ? previousData.username : '' %>"required/>
     <label for="password">Password</label>
-    <input id="password" name="password" type="password" />
+    <input id="password" name="password" type="password" value="<%= locals.previousData ? previousData.password : '' %>"required/>
+    <label for="password_confirm">Password Confirm</label>
+    <input id="password_confirm" name="password_confirm" type="password" required/>
     <button type="submit">Sign Up</button>
   </form>
 </body>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+</head>
+<body>
+    <%- include('partials/header', { pages }) %>
+    <% if (locals.errors) { %>
+    <ul>
+        <% errors.forEach(error => { %>
+        <li style="color: red;"><%= error.msg %></li>
+        <% }) %>
+    </ul>
+    <% } %>
+  <h1>Sign Up</h1>
+  <form action="/member" method="POST">
+    <label for="password">Member Password</label>
+    <input id="password" name="password" type="password" required/>
+    <button type="submit">Sign Up</button>
+  </form>
+</body>
+</html>
