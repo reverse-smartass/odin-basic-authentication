@@ -1,6 +1,5 @@
-import { Router } from 'express';
-const indexRouter = Router();
-
+const express = require('express');
+const indexRouter = express.Router();
 
 indexRouter.get("/", (req, res) =>async (req, res) => {
 
@@ -17,4 +16,4 @@ indexRouter.get("/", (req, res) =>async (req, res) => {
 });
 
 
-export default indexRouter;
+module.exports = indexRouter;

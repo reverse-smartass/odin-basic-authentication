@@ -1,7 +1,7 @@
-import { Router } from 'express';
-const signupRouter = Router();
+const express = require('express');
+const signupRouter = express.Router();
 
-app.get("/sign-up", (req, res) =>
+signupRouter.get("/", (req, res) =>
   res.render("sign-up-form")
 );
 
@@ -34,7 +34,7 @@ const validateSignUp = [
   }),
 ];
 
-app.post("/sign-up", validateSignUp, async (req, res, next) => {
+signupRouter.post("/", validateSignUp, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("sign-up-form", {
@@ -62,4 +62,4 @@ app.post("/sign-up", validateSignUp, async (req, res, next) => {
 
 
 
-export default indexRouter;
+module.exports = signupRouter;

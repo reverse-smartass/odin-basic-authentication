@@ -40,5 +40,20 @@
             <button type="submit">Log In</button>
         </form>
     <%}%>
+
+     <script>
+        async function deleteItem(id){
+            if(!confirm("Delete this message?")) return;
+
+            const response = await fetch(`/message/delete/${id}`, {
+                method:'DELETE',
+            });
+
+            if(response.ok){
+                alert('Deleted');
+                location.reload();
+            }
+        }
+    </script>
 </body>
 </html>

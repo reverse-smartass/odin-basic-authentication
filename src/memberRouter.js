@@ -1,8 +1,6 @@
-import { Router } from 'express';
-const memberRouter = Router();
-
-
-memberRouter.get("/member", (req, res) => {
+const express = require('express');
+const memberRouter = express.Router();
+memberRouter.get("/", (req, res) => {
   if (req.user) {
     res.render("member-form");
   } else {
@@ -23,7 +21,7 @@ const validateMember = [
   }),
 ];
 
-memberRouter.post("/member", validateMember, async (req, res, next) => {
+memberRouter.post("/", validateMember, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("member-form", {
@@ -56,4 +54,4 @@ memberRouter.post("/member", validateMember, async (req, res, next) => {
   }
 });
 
-export default indexRouter;
+module.exports = memberRouter;
