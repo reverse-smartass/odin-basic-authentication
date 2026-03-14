@@ -15,17 +15,23 @@
     </ul>
     <% } %>
     <% if (locals.currentUser) {%>
-        <h1>WELCOME BACK <%= currentUser.username %>, member status: <%= currentUser.member_status%></h1>
+        <h1>WELCOME BACK <%= currentUser.username %>, member status: <%= currentUser.member_status%>, admin status: <%= currentUser.is_admin%></h1>
         <a href="/log-out">LOG OUT</a>
         <h1>Message List</h1>
         <ul>
-        <% if (currentUser.member_status) {%>
+        <% if (currentUser.member_status || currentUser.is_admin) {%>
             <% messages.forEach(message => { %>
-                <li><strong><%= message.username %>:</strong> <%= message.message %> <em>(<%= message.created_at.toLocaleString() %>)</em> <button onclick="deleteItem('<%= message.id %>')">x</button> </li>
+                <li><strong><%= message.username %>:</strong> <%= message.message %> <em>(<%= message.created_at.toLocaleString() %>)</em> 
+                <% if ( currentUser.is_admin) {%>
+                    <button onclick="deleteItem('<%= message.id %>')">x</button>  
+                <%}%> </li>
             <% }) %>
         <% } else { %>
             <% messages.forEach(message => { %>
-                <li> <%= message.message %>  <button onclick="deleteItem('<%= message.id %>')">x</button> </li>
+                <li> <%= message.message %> 
+                <% if ( currentUser.is_admin) {%>
+                    <button onclick="deleteItem('<%= message.id %>')">x</button>  
+                <%}%> </li>
             <% }) %>
         <%}%>
     </ul>

@@ -44,14 +44,15 @@ signupRouter.post("/", validateSignUp, async (req, res, next) => {
       previousData: req.body,
     });
   }
-  const { first_name, last_name, username, password, password_confirm } =
+  const { first_name, last_name, username, password, password_confirm, is_admin } =
     req.body;
-  if (first_name && last_name && username && password && password_confirm) {
+  if (first_name && last_name && username && password && password_confirm && is_admin) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
+      const admin = is_admin === "ok";
       await pool.query(
-        "INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)",
-        [first_name, last_name, username, hashedPassword],
+        "INSERT INTO users (first_name, last_name, username, password, is_admin) VALUES ($1, $2, $3, $4, $5)",
+        [first_name, last_name, username, hashedPassword, admin],
       );
       res.redirect("/");
     } catch (err) {
