@@ -66,14 +66,17 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
 
   res.locals.pages = [
-    { name: "Home", path: "/" },
-    { name: "New User", path: "/sign-up" },
+    { name: "Home", path: "/" }
   ];
 
   res.locals.memberPages = [
     { name: "Become Member", path: "/member" },
     { name: "New Message", path: "/message" }
   ];
+
+  res.locals.nonMemberPages = [
+     { name: "New User", path: "/sign-up" },
+  ];  
 
   next();
 });
