@@ -1,12 +1,13 @@
 const express = require('express');
 const memberRouter = express.Router();
+const { body, validationResult } = require("express-validator");
+const pool = require('./db');
+
 memberRouter.get("/", (req, res) => {
   if (req.user) {
     res.render("member-form");
   } else {
     return res.render("index", {
-      pages,
-      memberPages,
       errors: [{ msg: "You're not signed in!" }],
     });
   }
@@ -25,8 +26,6 @@ memberRouter.post("/", validateMember, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("member-form", {
-      pages,
-      memberPages,
       errors: errors.array(),
       previousData: req.body,
     });
@@ -39,8 +38,6 @@ memberRouter.post("/", validateMember, async (req, res, next) => {
     );
     if (member.rows.length > 0 && member.rows[0].member_status === true) {
       return res.render("index", {
-        pages,
-        memberPages,
         errors: [{ msg: "You're already a member!" }]
       });
     }

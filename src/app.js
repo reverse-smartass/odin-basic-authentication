@@ -1,31 +1,22 @@
 /////// app.js
 const bcrypt = require("bcryptjs");
 const path = require("node:path");
-const { Pool, Result } = require("pg");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const { name } = require("ejs");
 const LocalStrategy = require("passport-local").Strategy;
 require("dotenv").config();
-const { body, validationResult } = require("express-validator");
 const indexRouter = require("./indexRouter");
 const messageRouter = require("./messageRouter");
 const signupRouter = require("./signupRouter");
 const memberRouter = require("./memberRouter");
-const pool = new Pool({
-  database: process.env.DB_INVENTORY_DATABASE,
-  user: process.env.DB_LOCAL_USER,
-  password: process.env.DB_LOCAL_PASSWORD,
-  host: process.env.DB_LOCAL_HOST,
-  port: process.env.DB_PORT,
-});
-
+const pool = require("./db");
 const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 

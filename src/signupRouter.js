@@ -1,6 +1,8 @@
 const express = require('express');
 const signupRouter = express.Router();
-
+const { body, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const pool = require('./db');
 signupRouter.get("/", (req, res) =>
   res.render("sign-up-form")
 );
@@ -38,8 +40,6 @@ signupRouter.post("/", validateSignUp, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("sign-up-form", {
-      pages,
-      memberPages,
       errors: errors.array(),
       previousData: req.body,
     });
